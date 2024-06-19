@@ -1,5 +1,5 @@
 # check-security-linux
-#### Script pentru detectia riscurilor de securitate in linux. [main](####script)  
+#### Script pentru detectia riscurilor de securitate in linux. [script principal](#script)  
 Utilitati:  
 1. Verificare executabile, permisiuni [check_executables.sh] [check_permissions.sh]
 2. Verificare procese [check_processees.sh]
@@ -13,21 +13,23 @@ Utilitati:
 * Verificare versiuni pachete, verificare sume de control
 
 # 18.06.2024
-#### Documentatie
-M-am documentat cu privire la ceea ce trebuie facut la acest script  
-Verificare fisiere corupte: [linuxmint](https://forums.linuxmint.com/viewtopic.php?t=359105)  
-Lista pachete vechi ce pot fi updatate: [askubuntu](https://askubuntu.com/questions/221385/how-to-find-which-package-can-be-updated)  
-Sistemul de partitionare al linux-ului, pentru aflarea executabilelor: [javatpoint](https://www.javatpoint.com/linux-file-system)  
-Probleme legate de securitate (sgid, suid) user group permissions pentru executabile: [linkedin](https://www.linkedin.com/advice/3/what-implications-setting-suid-sgid-sticky-abvde)
+### Documentatie
+#### Documentatie privind informatiile necesare pentru creearea scriptului:
+1. Verificare fisiere corupte: [linuxmint](https://forums.linuxmint.com/viewtopic.php?t=359105)  
+2. Lista pachete vechi ce pot fi updatate: [askubuntu](https://askubuntu.com/questions/221385/how-to-find-which-package-can-be-updated)  
+3. Sistemul de partitionare al linux-ului, pentru aflarea executabilelor: [javatpoint](https://www.javatpoint.com/linux-file-system)  
+4. Probleme legate de securitate (sgid, suid) user group permissions pentru executabile: [linkedin](https://www.linkedin.com/advice/3/what-implications-setting-suid-sgid-sticky-abvde)
 
 # 19.06.2024
 ### Readme
-Cum se face un README.md bun.  
-Cum arata: [medium](https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20cb7cbcd6f)  
-Tutorial: [markdowntutorial](https://www.markdowntutorial.com/)
+#### Cum se face un README.md bun.  
+* [Tutorial][medium](https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20cb7cbcd6f)  
+* [Tutorial interactiv](https://www.markdowntutorial.com/)
+* [Prezentare](https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/)
 
 ### Construirea script-urilor pentru gestionarea problemelor de securitate din cadrul unui linux.  
-#### Script  
+#### Script
+<a name="script"></a>
 Contine:  
 * check_executables.sh
 * check_permissions.sh
