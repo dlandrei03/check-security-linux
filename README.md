@@ -1,7 +1,7 @@
 # check-security-linux
 #### Script pentru detectia riscurilor de securitate in linux. [script principal](#script)  
 Utilitati:  
-1. Verificare executabile, permisiuni [check_executables.sh](#script-executables) [check_permissions.sh]
+1. Verificare executabile, permisiuni [check_executables.sh](#script-executables) [check_permissions.sh](#script-permissions)
 2. Verificare procese [check_processees.sh]
 3. Verificare versiuni pachete, verificare sume de control [check_packets.sh] [check_controlsum.sh]
 
@@ -31,13 +31,24 @@ Utilitati:
 #### Script principal
 <a name="script"></a>
 Contine:  
-* check_executables.sh
-* check_permissions.sh
+* [check_executables.sh](#script-executables)
+* [check_permissions.sh](#script-permissions)
 * check_processees.sh
 * check_packets.sh
 * check_controlsum.sh
 
 Executarea script-urilor pentru gestionarea problemelor de securitate
+
 ## check_executables.sh
 <a name="script-executables"></a>
-check_executables.sh - Verificarea dreptului de executie al fisierelor
+### Continut:
+* Cautarea in directoarele in care se afla fisierele binare
+* Gasirea celor neexecutabile
+* Stergerea la alegerea utilizatorului
+* Modificarea acestuia in executabil
+
+## check_permissions.sh
+<a name="script-permissions"></a>
+## Continut:
+* Cautarea fisierelor ce au SUID sau GUID setat, executabile
+* Gestionarea acestora pentru a nu putea fi executate de oricine, la alegerea utilizatorului
