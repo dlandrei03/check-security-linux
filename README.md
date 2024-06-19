@@ -1,7 +1,7 @@
 # check-security-linux
 #### Script pentru detectia riscurilor de securitate in linux. [script principal](#script)  
 Utilitati:  
-1. Verificare executabile, permisiuni [check_executables.sh] [check_permissions.sh]
+1. Verificare executabile, permisiuni [check_executables.sh](#script-executables) [check_permissions.sh]
 2. Verificare procese [check_processees.sh]
 3. Verificare versiuni pachete, verificare sume de control [check_packets.sh] [check_controlsum.sh]
 
@@ -23,12 +23,12 @@ Utilitati:
 # 19.06.2024
 ### Readme
 #### Cum se face un README.md bun.  
-* [Tutorial][medium](https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20cb7cbcd6f)  
+* [Tutorial](https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20cb7cbcd6f)  
 * [Tutorial interactiv](https://www.markdowntutorial.com/)
 * [Prezentare](https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/)
 
 ### Construirea script-urilor pentru gestionarea problemelor de securitate din cadrul unui linux.  
-#### Script
+#### Script principal
 <a name="script"></a>
 Contine:  
 * check_executables.sh
@@ -39,4 +39,5 @@ Contine:
 
 Executarea script-urilor pentru gestionarea problemelor de securitate
 ## check_executables.sh
+<a name="script-executables"></a>
 check_executables.sh - Verificarea dreptului de executie al fisierelor
