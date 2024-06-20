@@ -10,10 +10,10 @@ sleep 1
 echo "Checking permissions..."
 sleep 1
 
-fileProblemUID=$(sudo find / -type f -perm -4000 -print 2>/dev/null)
-fileProblemGID=$(sudo find / -type f -perm -2000 -print 2>/dev/null)
+fileProblemUID=$(sudo find /home/student -type f -perm -u=s -print 2>/dev/null)
+fileProblemGID=$(sudo find / -type f -perm -g=s -print 2>/dev/null)
 
-# Verificam probleme ce pot aparea (UID sau GID nu sunt root sau un utilizatori de incredere)
+# Verificam probleme ce pot aparea (UID sau GID nu sunt root sau nu utilizatori de incredere)
 
 fixProblemUID()
 {
@@ -35,15 +35,16 @@ problemFileUID()
 {
     local file=$1
 
-    local uid=$(ls -l $file | cut -d" " -f3)
+    local uid=$(sudo ls -l $file | cut -d" " -f3)
 
-    local allexecute=$(ls -l $file | cut -c10)
-    if [[ $allexecute == 'x' ]]
+    echo "Checking UID for file $file: $uid"
+
+    if [[ $uid == "root" ]]
     then
-        echo -e "\e[31mFile $file can be executed by anybody and has SUID setted!\e[0m"
+        return 0
     fi
 
-    echo -e "\e[33mDo you want to change the executable for others to none?(y/n)"
+    echo -e "\e[33mDo you want to change the executable for others to none?(y/n)\e[0m"
     read answer
     if [[ $answer == 'y' ]]
     then
@@ -55,15 +56,15 @@ problemFileGID()
 {
     local file=$1
 
-    local uid=$(ls -l $file | cut -d" " -f3)
+    local gid=$(sudo ls -l $file | cut -d" " -f4)
 
-    local allexecute=$(ls -l $file | cut -c7)
-    if [[ $allexecute == 'x' ]]
+    echo "Checking GID for file $file: $gid"
+    if [[ $gid == "root" ]]
     then
-        echo -e "\e[31mFile $file can be executed by anybody and has GUID setted!\e[0m"
+        return 0
     fi
 
-    echo -e "\e[33mDo you want to change the executable for groups to none?(y/n)"
+    echo -e "\e[33mDo you want to change the executable for groups to none?(y/n)\e[0m"
     read answer
     if [[ $answer == 'y' ]]
     then
@@ -73,7 +74,7 @@ problemFileGID()
 
 for file1 in $fileProblemUID
 do
-    if test -x $file1
+    if sudo test -x $file1 && sudo test -e $file1
     then
         problemFileUID $file1
     fi
@@ -85,7 +86,7 @@ echo
 
 for file2 in $fileProblemGID
 do
-    if test -x $file2
+    if sudo test -x $file2 && sudo test -e $file2
     then
         problemFileGID $file2
     fi
