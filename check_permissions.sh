@@ -6,14 +6,13 @@ echo "##############################"
 echo "##############################"
 echo 
 
-sleep 1
 echo "Checking permissions..."
-sleep 1
 
-fileProblemUID=$(sudo find /home/student -type f -perm -u=s -print 2>/dev/null)
+fileProblemUID=$(sudo find / -type f -perm -u=s -print 2>/dev/null)
 fileProblemGID=$(sudo find / -type f -perm -g=s -print 2>/dev/null)
 
 # Verificam probleme ce pot aparea (UID sau GID nu sunt root sau nu utilizatori de incredere)
+sudoUsers=$(cat /etc/group | grep sudo | cut -d: -f4)
 
 fixProblemUID()
 {
@@ -21,6 +20,8 @@ fixProblemUID()
 
     sudo chmod o-x $file
     echo -e "\e[32mFile has no longer right to be executed by anyone!\e[0m"
+
+    # Stergere
 }
 
 fixProblemGID()
@@ -38,6 +39,8 @@ problemFileUID()
     local uid=$(sudo ls -l $file | cut -d" " -f3)
 
     echo "Checking UID for file $file: $uid"
+
+    # Verificare utilizatori safe, nu doar root
 
     if [[ $uid == "root" ]]
     then

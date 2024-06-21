@@ -2,7 +2,7 @@
 #### Script pentru detectia riscurilor de securitate in linux. [script principal](#script)  
 Utilitati:  
 1. Verificare executabile, permisiuni [check_executables.sh](#script-executables) [check_permissions.sh](#script-permissions)
-2. Verificare procese [check_processees.sh]
+2. Verificare procese (#script-executables)[check_processees.sh]
 3. Verificare versiuni pachete, verificare sume de control [check_packets.sh] [check_controlsum.sh]
 
 # 17.06.2024
@@ -33,7 +33,7 @@ Utilitati:
 Contine:  
 * [check_executables.sh](#script-executables)
 * [check_permissions.sh](#script-permissions)
-* check_processees.sh
+* [check_processees.sh](#script-executables)
 * check_packets.sh
 * check_controlsum.sh
 
@@ -49,6 +49,20 @@ Executarea script-urilor pentru gestionarea problemelor de securitate
 
 ## check_permissions.sh
 <a name="script-permissions"></a>
-## Continut:
+### Continut:
 * Cautarea fisierelor ce au SUID sau GUID setat, executabile
 * Gestionarea acestora pentru a nu putea fi executate de oricine, la alegerea utilizatorului
+
+## check_processes.sh
+<a name="script-processes"></a>
+### Documentatie:
+* [Antivirus](https://www.linkedin.com/advice/3/what-best-ways-troubleshoot-linux-system-5z1tc) pentru linux (chkrootkit)
+* [Chkrootkit](https://www.kali.org/tools/chkrootkit/) utilizari
+
+### Continut:
+* Cauta procesele ce ruleaza pe sistem ce folosesc cel mai mare procentaj de memorie si CPU
+* Verifica procesele importante sshd, cron etc sa fie lansate de init
+
+# 21.06.2024
+* Verificarea proceselor (parinti) sa fie cei asteptati
+* Atentionarea utilizatorului printr-un warning in cazul in care parintele nu este cel asteptat
