@@ -2,6 +2,16 @@
 
 echo "Searching for executable files without rights of execution..."
 
+execFile=/var/log/csl/executefile
+
+if [[ ! -e $execFile ]]
+then
+    sudo touch $execFile
+else
+    sudo rm $execFile
+    sudo touch $execFile
+fi
+
 binaries="/bin
           /sbin
           /usr/bin
@@ -50,15 +60,11 @@ nonExecutableFile ()
 
 for binary in $binaries
 do
-    echo 
-    echo "##############################"
-    echo 
-
     fileProblem=$(sudo find "$binary" -type f ! -executable -print 2>/dev/null)
     
     if [[ -z $fileProblem ]]
     then
-        echo "$binary is safe!"
+        echo "$binary is safe!" >> $execFile
         continue
     fi
 

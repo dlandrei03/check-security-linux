@@ -7,90 +7,115 @@ echo "##############################"
 echo 
 
 echo "Checking permissions..."
+dataBase=/var/log/csl/database
 
-fileProblemUID=$(sudo find / -type f -perm -u=s -print 2>/dev/null)
-fileProblemGID=$(sudo find / -type f -perm -g=s -print 2>/dev/null)
+if [[ -e $dataBase ]]
+then
+    echo "Loading database..."
+    sleep 1
+else
+    touch $dataBase
+fi
 
-# Verificam probleme ce pot aparea (UID sau GID nu sunt root sau nu utilizatori de incredere)
-sudoUsers=$(cat /etc/group | grep sudo | cut -d: -f4)
+# Fisiere cu SUID si SGID setate
+fileWithUID=$(sudo find / -type f -perm -u=s -print 2>/dev/null)
+fileWithGID=$(sudo find / -type f -perm -g=s -print 2>/dev/null)
 
-fixProblemUID()
+sudoUsers=$(sudo cat /etc/group | grep sudo | cut -d: -f4 | tr -s "," " ")
+
+# Scoatem dreptul de executabil/ lasam la alegerea user-ului
+solveProblem()
 {
-    local file=$1
+    local fisier=$1
 
-    sudo chmod o-x $file
-    echo -e "\e[32mFile has no longer right to be executed by anyone!\e[0m"
+    echo "Do you want to make $fisier non-executable by others?(y/n)"
+    read answer
 
-    # Stergere
+    # Daca raspunsul este da, modificam fisierul a.i. sa nu mai fie executat de oricine cu drepturi su
+    if [[ $answer == 'y' || $answer == 'Y' ]]
+    then
+        sudo chmod o-x $fisier
+        echo "File can no longer be executed by others!"
+        return 0
+    else
+        # Salvam raspunsul in baza de date
+        echo $fisier >>$dataBase
+        echo "Raspunsul a fost salvat in baza de date"
+        return 0
+    fi
+
+    return 1
 }
 
-fixProblemGID()
+checkDatabaseOption()
 {
     local file=$1
 
-    sudo chmod g-x $file
-    echo -e "\e[32mFile has no longer right to be executed by any group!\e[0m"
+    # Verificam daca acesta exista in baza de date
+    if grep -q "$file" "$dataBase"
+    then
+        return 0
+    fi
+    return 1
 }
 
-problemFileUID()
+# Verificam daca oricine poate executa acest fisier cu SUID/SGID setat
+checkExecutableByAny()
 {
-    local file=$1
+    local fisier=$1
 
-    local uid=$(sudo ls -l $file | cut -d" " -f3)
+    # Drept de executie by others
+    local perm=$(sudo stat -c %A check_permissions.sh | cut -c10)
 
-    echo "Checking UID for file $file: $uid"
-
-    # Verificare utilizatori safe, nu doar root
-
-    if [[ $uid == "root" ]]
+    # Daca nu poate fi executat de others, iesim
+    if [[ $perm != 'x' ]]
     then
         return 0
     fi
 
-    echo -e "\e[33mDo you want to change the executable for others to none?(y/n)\e[0m"
-    read answer
-    if [[ $answer == 'y' ]]
+    # SUID
+    if [[ $2 == "1" ]]
     then
-        fixProblemUID $file
+        # Verificam cine detine fisierul (root sau alti utilizatori cu drepturi de sudo)
+        local own=$(sudo stat -c %U $fisier)
+    else
+        local own=$(sudo stat -c %G $fisier)
     fi
-}
 
-problemFileGID()
-{
-    local file=$1
-
-    local gid=$(sudo ls -l $file | cut -d" " -f4)
-
-    echo "Checking GID for file $file: $gid"
-    if [[ $gid == "root" ]]
+    if [[ $own == "root" ]]
     then
+        if ! checkDatabaseOption $fisier
+        then
+            solveProblem $fisier
+        fi
         return 0
     fi
 
-    echo -e "\e[33mDo you want to change the executable for groups to none?(y/n)\e[0m"
-    read answer
-    if [[ $answer == 'y' ]]
-    then
-        fixProblemGID $file
-    fi
+    for usOw in $sudoUsers
+    do
+        # Other sudoers
+        if [[ $own == $usOw ]]
+        then
+            if ! checkDatabaseOption $fisier
+            then
+                solveProblem $fisier
+            fi
+            return 0
+        fi
+    done
 }
 
-for file1 in $fileProblemUID
+suid=$(echo "1")
+sgid=$(echo "2")
+
+for file in $fileWithUID
 do
-    if sudo test -x $file1 && sudo test -e $file1
-    then
-        problemFileUID $file1
-    fi
+    checkExecutableByAny $file $suid
 done
 
-echo 
-echo "##############################"
-echo 
-
-for file2 in $fileProblemGID
+for file in $fileWithGID
 do
-    if sudo test -x $file2 && sudo test -e $file2
-    then
-        problemFileGID $file2
-    fi
+    checkExecutableByAny $file $sgid
 done
+
+echo "Fisierul de log se gaseste in $dataBase!"
