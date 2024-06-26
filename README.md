@@ -62,7 +62,7 @@ Executa toate scripturile pentru a verifica si remedia probleme de securitate
 
 #### check_controlsum.sh
 * Contine o baza de date (o creeaza la lansare daca nu exista) cu sumele de control ale pachetelor de pe linux
-* (To do) Permite actualizarea sumei de control in cazul in care pachetul a fost modificat
+* Permite actualizarea sumei de control in cazul in care pachetul a fost modificat
 * Pentru pachetele cu sume de control diferite fata de cele initiale apare un warning
 
 ### Documentatie
