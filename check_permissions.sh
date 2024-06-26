@@ -6,17 +6,20 @@ echo "##############################"
 echo "##############################"
 echo 
 
-echo "Checking permissions..."
-dataBase=/var/log/csl/database
+echo -e "\e[33m[PERMISSIONS] Checking permissions...\e[0m"
+
+dataBase=/var/log/csl/permissions.log
 
 if [[ -e $dataBase ]]
 then
-    echo "Loading database..."
+    echo "[PERMISSIONS] Loading database..."
     sleep 1
+    echo "[PERMISSIONS] Database loaded!"
 else
     touch $dataBase
 fi
 
+echo "[PERMISSIONS] Finding files with SUID and SGID set..."
 # Fisiere cu SUID si SGID setate
 fileWithUID=$(sudo find / -type f -perm -u=s -print 2>/dev/null)
 fileWithGID=$(sudo find / -type f -perm -g=s -print 2>/dev/null)
@@ -28,19 +31,19 @@ solveProblem()
 {
     local fisier=$1
 
-    echo "Do you want to make $fisier non-executable by others?(y/n)"
+    echo "[PERMISSIONS] Do you want to make $fisier non-executable by others?(y/n)"
     read answer
 
     # Daca raspunsul este da, modificam fisierul a.i. sa nu mai fie executat de oricine cu drepturi su
     if [[ $answer == 'y' || $answer == 'Y' ]]
     then
         sudo chmod o-x $fisier
-        echo "File can no longer be executed by others!"
+        echo "[PERMISSIONS] File can no longer be executed by others!"
         return 0
     else
         # Salvam raspunsul in baza de date
         echo $fisier >>$dataBase
-        echo "Raspunsul a fost salvat in baza de date"
+        echo "[PERMISSIONS] Answer saved in database"
         return 0
     fi
 
@@ -118,4 +121,5 @@ do
     checkExecutableByAny $file $sgid
 done
 
-echo "Fisierul de log se gaseste in $dataBase!"
+echo "[PERMISSIONS] Permissions check done!"
+echo "[PERMISSIONS] Log file is in: $dataBase!"

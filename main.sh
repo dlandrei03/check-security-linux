@@ -2,12 +2,10 @@
 
 logFile=/var/log/csl
 
-if [[ -e $logFile ]]
+if [[ ! -e $logFile ]]
 then
-    echo Directorul $logFile exista!
-else
     sudo mkdir -p $logFile
-    echo Directorul $logFile a fost creeat!
+    echo "[MAIN] Directorul $logFile a fost creeat!"
 fi
 
 echo -e "\e[32m##############################"

@@ -37,30 +37,30 @@ Acest proiect contine scripturi pentru detectia riscurilor de securitate intr-un
 
 ### Detalii Scripturi
 
-##### main.sh
+#### main.sh
 Executa toate scripturile pentru a verifica si remedia probleme de securitate
 
-##### check_executables.sh
+#### check_executables.sh
 * Verifica directoarele binare pentru fisiere neexecutabile;
 * Permite stergerea sau modificarea permisiunilor acestora.
 
-##### check_permissions.sh
+#### check_permissions.sh
 * Verifica fisierele ce au setate SUID sau SGID;
 * Daca others au drept de executie asupra acestuia, apare un warning;
 * Ofera posibilitatea de adaugare intr-o baza de date a acelor fisiere considerate safe de utilizator;
 * Permite stergerea dreptului de executie pentru aceste fisiere.
 
-##### check_processes.sh
+#### check_processes.sh
 * Verifica procesele consumatoare de CPU/MEM
 * Pentru cele care consuma mai mult de 10% din CPU sau MEM, verifica procesele deschise de acestea
 * Creeaza o baza date pentru fisierel considerate safe de utilizator
-* (To do) Permite inchiderea procesului
+* Permite inchiderea procesului
 
-##### check_packets.sh
+#### check_packets.sh
 * Verifica versiunea actuala a pachetelor si o compara cu cea aflata pe linux
 * Permite actualizarea pachetelor
 
-##### check_controlsum.sh
+#### check_controlsum.sh
 * Contine o baza de date (o creeaza la lansare daca nu exista) cu sumele de control ale pachetelor de pe linux
 * (To do) Permite actualizarea sumei de control in cazul in care pachetul a fost modificat
 * Pentru pachetele cu sume de control diferite fata de cele initiale apare un warning
