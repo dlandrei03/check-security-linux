@@ -105,3 +105,7 @@ Executa toate scripturile pentru a verifica si remedia probleme de securitate
 * Am modificat scriptul main.sh
     * Adaugarea unui nou director pentru stocarea log-urilor
 * Am creeat scripturile check_packets.sh, check_controlsum.sh
+
+# 26.06.2024
+* Am implementat kill process pentru procesele la care s-au constatat nereguli
+* Am implementat modificarea sumei de control la alegerea utilizatorului pentru pachetele cu nereguli
